@@ -12,7 +12,7 @@
 			template:
       `
       <div class = "list">
-			<p v-for ="(task,index) in tasks" @click = markDone(index)>Task No.{{ task.taskId }}<br> Task: {{task.taskName}}</p>
+			<p v-for ="(task,index) in tasks"@click.once = "notify" @dblclick = markDone(index)>Task No.{{ task.taskId }}<br> Task: {{task.taskName}}</p>
 			
 			<taskAdd @add-task = "AddTask"></taskAdd>
 			
@@ -38,6 +38,9 @@
         }
 			},
   methods:{
+  	notify(){
+  		alert('Click the task to mark it as done')
+  	},
     markDone(select){
       this.tasks.splice(select,1)
     },
