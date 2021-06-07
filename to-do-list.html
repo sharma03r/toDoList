@@ -1,0 +1,83 @@
+<html>
+	<head>
+		<script type="text/javascript" src = "https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+	</head>
+	<body>
+		<div id = "app">
+			<list></list>
+		</div>
+	</body>
+	<script>
+		Vue.component('list',{
+			template:
+      `
+      <div class = "list">
+			<p v-for ="(task,index) in tasks" @click = markDone(index)>Task No.{{ task.taskId }}<br> Task: {{task.taskName}}</p>
+			
+			<taskAdd @add-task = "AddTask"></taskAdd>
+			
+      </div>
+			`,
+			data(){
+				return{
+					tasks: [
+					{
+						taskId: 001,
+						taskName: 'This is first task'
+					},
+					{
+						taskId: 002,
+						taskName: 'This is second task'
+					},
+					{
+						taskId: 003,
+						taskName: 'This is third task'
+					},
+					]
+          
+        }
+			},
+  methods:{
+    markDone(select){
+      this.tasks.splice(select,1)
+    },
+    AddTask(newTask){
+    	this.tasks.push(newTask)
+    }
+  }
+}),
+		Vue.component('taskAdd',{
+			template: `
+				<form class = "taskAdd" @submit.prevent = "addTask">
+					<input type = "text" placeholder = "taskID" v-model = "taskId" required = ""/>
+					<input type = "text" placeholder = "Task Name" v-model= "taskName" required= ""/>
+					<input type = "submit" value = "Add Task">
+				</form>
+			`,
+			data(){
+				return{
+					taskId: null,
+					taskName: null
+				}
+			},
+			methods:{
+				addTask(){
+					if(this.taskId && this.taskName)
+					{
+						let newTask = {
+							taskId: this.taskId,
+							taskName: this.taskName
+						}
+						this.$emit('add-task',newTask),
+						this.taskId = null,
+						this.taskName = null
+					}
+			}
+      }
+		}),
+		
+	new Vue({
+			el : '#app'
+		})
+	</script>
+</html>
